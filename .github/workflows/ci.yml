@@ -1,4 +1,4 @@
-name: NestJS CI
+name: Full Stack CI (NestJS + Next.js)
 
 on:
   push:
@@ -13,28 +13,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
-          cache-dependency-path: be/package-lock.json
+          cache-dependency-path: |
+            be/package-lock.json
+            fe/package-lock.json
 
-      - name: Install dependencies
+      ### --- BACKEND: NestJS ---
+      - name: Install backend dependencies
         working-directory: be
         run: npm install
 
-      - name: Run linting
+      - name: Lint backend
         working-directory: be
         run: npm run lint
 
-      - name: Run tests
+      - name: Test backend
         working-directory: be
         run: npm run test
 
-      - name: Build application
+      - name: Build backend
         working-directory: be
+        run: npm run build
+
+      ### --- FRONTEND: Next.js ---
+      - name: Install frontend dependencies
+        working-directory: fe
+        run: npm install
+
+      - name: Lint frontend
+        working-directory: fe
+        run: npm run lint
+
+      - name: Test frontend
+        working-directory: fe
+        run: npm run test
+
+      - name: Build frontend
+        working-directory: fe
         run: npm run build
