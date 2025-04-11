@@ -79,6 +79,7 @@ describe('AuthController', () => {
 
       const result = await authController.register(validRegisterDto);
 
+
       // Assertions
       expect(result).toEqual(createdUser);
       expect(createUserMock).toHaveBeenCalledWith(
